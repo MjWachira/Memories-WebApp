@@ -1,0 +1,51 @@
+﻿<div class="card shadow m-2 col-4 p-4" style="width: 18rem;">
+    <img src="https://cdn.pixabay.com/photo/2023/12/27/05/14/ai-generated-8471372_1280.jpg" class="card-img-top" alt="@memory.Name">
+    <div class="card-body">
+        <h5 class="card-title">@memory.Name</h5>
+
+        <div class="d-flex justify-content-between">
+            <span>
+                @memory.Description
+            </span>
+
+        </div>
+     <div class="justify-content-between">
+        <span>
+            Date @memory.Date
+        </span>
+    </div>
+        <div class="justify-content-between">
+            <span>
+             Location @memory.location
+            </span>
+        </div>
+        <div class="d-flex justify-content-around">
+            <button @onclick="() => EditMemory()" class="mt-4 btn btn-dark">Edit</button>
+
+            <button @onclick="DeleteMemory" class="mt-4 btn btn-danger">Delete</button>
+        </div>
+    </div>
+</div>
+
+
+@code {
+
+    [Parameter]
+    public Memory memory { get; set; } = default!;
+
+    [Parameter]
+    public EventCallback<Memory> OnEditMemory { get; set; }
+
+    [Parameter]
+    public EventCallback<Memory> OnDeleteMemory { get; set; }
+
+    private async Task EditMemory()
+    {
+        await OnEditMemory.InvokeAsync(memory);
+    }
+
+    private async Task DeleteMemory()
+    {
+        await OnDeleteMemory.InvokeAsync(memory);
+    }
+}

@@ -1,0 +1,79 @@
+﻿@page "/"
+
+<PageTitle>Home</PageTitle>
+
+<div class="row">
+    
+    <div class="col-4">
+        <AddMemory OnAddMemory="AddMemory"></AddMemory>
+    </div>
+
+    <div class="col-8">
+      <div class="row">
+        @foreach(var memory in memories){
+                <SingleMemory memory="memory"
+                              OnEditMemory="EditMem"
+                              OnDeleteMemory="DeleteMem">
+                </SingleMemory>
+        }
+        </div>
+    </div>
+</div>
+@code {
+
+    public List<Memory> memories = new List<Memory>()
+    {
+        new Memory()
+        {
+            Id=1,
+            Name="Bought a new house",
+            Description="Live To Remember This Day",
+            location="Nyeri"
+        },
+        new Memory()
+        {
+            Id=1,
+            Name="Bought a new Car",
+            Description="Live To Remember This Day",
+            location="Nyeri"
+        },
+         new Memory()
+        {
+            Id=1,
+            Name="Bought a new IPhone",
+            Description="Live To Remember This Day",
+            location="Nyeri"
+        }
+    };
+    public Memory EditMemory { get; set; } = null!;
+
+    public void AddMemory(Memory newMemory)
+    {
+        if (EditMemory == null)
+        {
+            newMemory.Id = memories.Count + 1;
+            memories.Add(newMemory);
+        }
+        else
+        {
+            var index = memories.FindIndex(m => m.Id == EditMemory.Id);
+            if (index != -1)
+            {
+                memories[index] = newMemory;
+            }
+
+            EditMemory = null!;
+        }
+    }
+
+    public void EditMem(Memory memory)
+    {
+        EditMemory = memory;
+    }
+
+    public void DeleteMem(Memory memory)
+    {
+        memories.Remove(memory);
+        EditMemory = null!;
+    }
+}

@@ -1,0 +1,75 @@
+﻿<div class="row shadow p-1">
+    <div class="row">
+        <img src="https://cdn.pixabay.com/photo/2016/09/14/08/18/film-1668918_1280.jpg"/>
+    </div>
+
+    <h1>@(EditMemory == null ? "Add New Memory" : "Edit Memory")</h1>
+    <div class="form-group">
+        <label for="Name">Name</label>
+        <input type="text" class="form-control" @bind="memory.Name" id="Name" placeholder="Memory Name">
+    </div>
+
+    <div class="form-group">
+        <label for="Description">Description</label>
+        <input type="text" class="form-control" @bind="memory.Description" id="Description" placeholder="Memory Description">
+    </div>
+
+    <div class="form-group">
+        <label for="Image">Image</label>
+        <input type="text" class="form-control" @bind="memory.location" id="Image" placeholder="Memory Image">
+    </div>
+
+
+    <button @onclick="AddOrUpdateMemory" class="mt-4 btn btn-primary">Submit</button>
+</div>
+
+@code {
+    [Parameter]
+    public EventCallback<Memory> OnAddMemory { get; set; }
+
+    [Parameter]
+    public Memory EditMemory { get; set; } = default!;
+
+    public Memory memory { get; set; } = new Memory();
+
+ 
+    protected override Task OnInitializedAsync()
+    {
+        
+        if (EditMemory != null)
+        {
+            memory = new Memory
+                {
+                    Name = EditMemory.Name,
+                    Description = EditMemory.Description,
+                    location = EditMemory.location,
+                    //Date = EditMemory.Date
+                 };
+        }
+
+        return base.OnInitializedAsync();
+    }
+
+    public async Task AddOrUpdateMemory()
+    {
+        await OnAddMemory.InvokeAsync(memory);
+        memory = new Memory();
+    }
+    
+    protected override async Task OnParametersSetAsync()
+    {
+        
+        if (EditMemory != null)
+        {
+            memory = new Memory
+                {
+                    Name = EditMemory.Name,
+                    Description = EditMemory.Description,
+                    location = EditMemory.location,
+                              
+                };
+        }
+
+        await base.OnParametersSetAsync();
+    }
+}
